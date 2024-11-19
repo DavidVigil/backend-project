@@ -1,0 +1,20 @@
+# Due to HW limitations
+FROM mongo:4.0.0
+
+ENV MONGO_INITDB_ROOT_USERNAME=admin
+ENV MONGO_INITDB_ROOT_PASSWORD=pass123
+
+RUN mkdir -p /data/db
+
+VOLUME ["/data/db"]
+
+EXPOSE 27017
+
+# Are you ok, mongo?
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s CMD mongo --eval "db.adminCommand('ping')" || exit 1
+
+# Run
+CMD ["mongod"]
+
+# docker build -t mongo:4 .
+# docker run --name mongodb -p 27017:27017 -d -v ./opt/mongodb_data:/data/db mongo:4
